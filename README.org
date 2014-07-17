@@ -7,5 +7,6 @@ you can compute the error of a peak calling model using this package.
 #+BEGIN_SRC R
 install.packages("devtools")
 devtools::install_github("tdhock/PeakError")
+library(PeakError)
 example(PeakError)
 #+END_SRC
