@@ -25,23 +25,23 @@ test_that("1 peakStart region examples correct", {
   expect_tp_fp(regions, Peaks("chr12", 12, 15), 0, 0)
   expect_tp_fp(regions, Peaks("chr5", 12, 15), 1, 0)
   expect_tp_fp(regions, Peaks("chr5", c(12, 18), c(15, 25)), 1, 1)
-  expect_tp_fp(regions, Peaks("chr5", c(5, 15), c(12, 18)), 1, 1)
-  expect_tp_fp(regions, Peaks("chr5", 5, 12), 0, 1)
-  expect_tp_fp(regions, Peaks("chr5", 5, 25), 0, 1)
+  expect_tp_fp(regions, Peaks("chr5", c(5, 15), c(12, 18)), 1, 0)
+  expect_tp_fp(regions, Peaks("chr5", 5, 12), 0, 0)
+  expect_tp_fp(regions, Peaks("chr5", 5, 25), 0, 0)
 })
 
 test_that("1 peakEnd region examples correct", {
   regions <-
     data.frame(chrom="chr5", chromStart=10, chromEnd=20, annotation="peakEnd")
-  expect_tp_fp(regions, Peaks("chr5", 15, 25), 0, 1)
+  expect_tp_fp(regions, Peaks("chr5", 15, 25), 0, 0)
   expect_tp_fp(regions, Peaks(), 0, 0)
   expect_tp_fp(regions, Peaks("chr5", 20, 30), 0, 0)
   expect_tp_fp(regions, Peaks("chr12", 12, 15), 0, 0)
   expect_tp_fp(regions, Peaks("chr5", 12, 15), 1, 0)
-  expect_tp_fp(regions, Peaks("chr5", c(12, 18), c(15, 25)), 1, 1)
+  expect_tp_fp(regions, Peaks("chr5", c(12, 18), c(15, 25)), 1, 0)
   expect_tp_fp(regions, Peaks("chr5", c(5, 15), c(12, 18)), 1, 1)
   expect_tp_fp(regions, Peaks("chr5", 5, 12), 1, 0)
-  expect_tp_fp(regions, Peaks("chr5", 5, 25), 0, 1)
+  expect_tp_fp(regions, Peaks("chr5", 5, 25), 0, 0)
 })
 
 test_that("1 noPeaks region examples correct", {
@@ -82,11 +82,11 @@ test_that("1 of each region examples correct", {
                  0, 0, 1,
                  0, 1, 0),
                c(0, 0, 0,
-                 1, 1, 1,
+                 1, 0, 0,
                  0, 0, 0,
                  0, 1, 0,
-                 0, 1, 0,
-                 0, 0, 1))
+                 0, 0, 0,
+                 0, 0, 0))
 })
 
 test_that("boundaries are correct", {
