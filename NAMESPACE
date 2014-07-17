@@ -1,0 +1,3 @@
+useDynLib(PeakError)
+exportPattern("^[[:alpha:]]+")
+

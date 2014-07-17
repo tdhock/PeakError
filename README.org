@@ -1,0 +1,11 @@
+PeakError: compute the annotation error of peak calls
+
+After constructing a database of annotated regions that represent your
+visual interpretation of the peak locations in a ChIP-seq experiment,
+you can compute the error of a peak calling model using this package.
+
+#+BEGIN_SRC R
+install.packages("devtools")
+devtools::install_github("tdhock/PeakError")
+example(PeakError)
+#+END_SRC
