@@ -57,3 +57,41 @@ test_that("1 noPeaks region examples correct", {
   expect_tp_fp(regions, Peaks("chr5", 5, 12), 0, 1)
   expect_tp_fp(regions, Peaks("chr5", 5, 25), 0, 1)
 })
+
+test_that("1 of each region examples correct", {
+  ## Same regions across all chroms.
+  r <-
+    data.frame(chromStart=c(10, 30, 50),
+               chromEnd=c(20, 40, 60),
+               annotation=c("noPeaks", "peakStart", "peakEnd"))
+  peaks <- rbind(Peaks("chr2", 5, 65),
+                 Peaks("chr3", c(23, 38), c(26, 55)),
+                 Peaks("chr4", c(32, 38), c(35, 55)),
+                 Peaks("chr5", 26, 55),
+                 Peaks("chr6", 38, 65))
+  regions <- NULL
+  for(chr in 1:6){
+    chrom <- paste0("chr", chr)
+    regions <- rbind(regions, data.frame(chrom, r))
+  }
+  expect_tp_fp(regions, peaks,
+               c(0, 0, 0,
+                 0, 0, 0,
+                 0, 1, 1,
+                 0, 1, 1,
+                 0, 0, 1,
+                 0, 1, 0),
+               c(0, 0, 0,
+                 1, 1, 1,
+                 0, 0, 0,
+                 0, 1, 0,
+                 0, 1, 0,
+                 0, 0, 1))
+})
+
+test_that("boundaries are correct", {
+  regions <- data.frame(chrom="chr1", chromStart=4, chromEnd=8)
+  expect_tp_fp(regions, Peaks("chr", c(1, 8), c(4, 10)), 0, 0)
+  expect_tp_fp(regions, Peaks("chr", c(1, 8), c(5, 10)), 0, 1)
+  expect_tp_fp(regions, Peaks("chr", c(1, 7), c(4, 10)), 0, 1)
+})
