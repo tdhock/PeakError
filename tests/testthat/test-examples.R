@@ -90,8 +90,10 @@ test_that("1 of each region examples correct", {
 })
 
 test_that("boundaries are correct", {
-  regions <- data.frame(chrom="chr1", chromStart=4, chromEnd=8)
-  expect_tp_fp(regions, Peaks("chr", c(1, 8), c(4, 10)), 0, 0)
-  expect_tp_fp(regions, Peaks("chr", c(1, 8), c(5, 10)), 0, 1)
-  expect_tp_fp(regions, Peaks("chr", c(1, 7), c(4, 10)), 0, 1)
+  regions <-
+    data.frame(chrom="chr1", chromStart=4, chromEnd=8, annotation="noPeaks")
+  expect_tp_fp(regions, Peaks("chr1", c(1, 8), c(4, 10)), 0, 0)
+  expect_tp_fp(regions, Peaks("chr1", c(1, 8), c(5, 10)), 0, 1)
+  expect_tp_fp(regions, Peaks("chr1", c(1, 8), c(6, 10)), 0, 1)
+  expect_tp_fp(regions, Peaks("chr1", c(1, 7), c(4, 10)), 0, 1)
 })

@@ -2,8 +2,12 @@ PeakError <- structure(function
 ### Compute true and false positive peak calls, with respect to a
 ### database of annotated regions.
 (peaks,
+### data.frame with columns chrom, chromStart, chromEnd.
  regions
+### data.frame with columns chrom, chromStart, chromEnd, annotation.
  ){
+  stopifnot(is.data.frame(peaks))
+  stopifnot(is.data.frame(regions))
   peak.list <- split(peaks, peaks$chrom)
   region.list <- split(regions, regions$chrom, drop=TRUE)
   ann2code <- c(noPeaks=0, peakStart=1, peakEnd=2)
@@ -16,6 +20,10 @@ PeakError <- structure(function
     p <- p[order(p$chromStart), ]
     r <- region.list[[chrom]]
     r <- r[order(r$chromStart), ]
+    r$annotation
+    if(is.null(r$annotation)){
+      stop("need annotation column in regions")
+    }
     code <- ann2code[as.character(r$annotation)]
     unknown <- r$annotation[is.na(code)]
     if(length(unknown)){
@@ -48,6 +56,9 @@ PeakError <- structure(function
   err$fn <- with(err, possible.tp-tp)
   err$fn.status <- ifelse(err$fn, "false negative", "correct")
   err
+### data.frame for each region with additional counts of true
+### positives (tp, possible.tp), false positives (fp, possible.fp,
+### fp.status), and false negatives (fn, fn.status).
 }, ex=function(){
   peaks <- rbind(Peaks("chr2", 5, 65),
                  Peaks("chr3", c(23, 38), c(26, 55)),
