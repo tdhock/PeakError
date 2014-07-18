@@ -58,42 +58,77 @@ test_that("1 noPeaks region examples correct", {
   expect_tp_fp(regions, Peaks("chr5", 5, 25), 0, 1)
 })
 
-test_that("1 of each region examples correct", {
-  ## Same regions across all chroms.
-  r <-
-    data.frame(chromStart=c(10, 30, 50),
-               chromEnd=c(20, 40, 60),
-               annotation=c("noPeaks", "peakStart", "peakEnd"))
-  peaks <- rbind(Peaks("chr2", 5, 65),
-                 Peaks("chr3", c(23, 38), c(26, 55)),
-                 Peaks("chr4", c(32, 38), c(35, 55)),
-                 Peaks("chr5", 26, 55),
-                 Peaks("chr6", 38, 65))
-  regions <- NULL
-  for(chr in 1:6){
-    chrom <- paste0("chr", chr)
-    regions <- rbind(regions, data.frame(chrom, r))
-  }
-  expect_tp_fp(regions, peaks,
-               c(0, 0, 0,
-                 0, 0, 0,
-                 0, 1, 1,
-                 0, 1, 1,
-                 0, 0, 1,
-                 0, 1, 0),
-               c(0, 0, 0,
-                 1, 0, 0,
-                 0, 0, 0,
-                 0, 1, 0,
-                 0, 0, 0,
-                 0, 0, 0))
+test_that("1 peaks region examples correct", {
+  regions <-
+    data.frame(chrom="chr5", chromStart=10, chromEnd=20, annotation="peaks")
+  expect_tp_fp(regions, Peaks("chr5", 15, 25), 1, 0)
+  expect_tp_fp(regions, Peaks(), 0, 0)
+  expect_tp_fp(regions, Peaks("chr5", 20, 30), 0, 0)
+  expect_tp_fp(regions, Peaks("chr12", 12, 15), 0, 0)
+  expect_tp_fp(regions, Peaks("chr5", 12, 15), 1, 0)
+  expect_tp_fp(regions, Peaks("chr5", c(12, 18), c(15, 25)), 1, 0)
+  expect_tp_fp(regions, Peaks("chr5", c(5, 15), c(12, 18)), 1, 0)
+  expect_tp_fp(regions, Peaks("chr5", 5, 12), 1, 0)
+  expect_tp_fp(regions, Peaks("chr5", 5, 25), 1, 0)
 })
 
-test_that("boundaries are correct", {
+test_that("1 of each region examples correct", {
+  x <- seq(5, 85, by=5)
+  peaks <- rbind(Peaks("chr2", x, x+3),
+                 Peaks("chr3", c(25, 38, 57), c(33, 54, 75)),
+                 Peaks("chr4", c(5, 32, 38, 65), c(15, 35, 55, 85)),
+                 Peaks("chr5", c(12, 26, 56, 75), c(16, 54, 59, 85)))
+  regions <- NULL
+  for(chr in 1:5){
+    regions <- rbind(regions, {
+      data.frame(chrom=paste0("chr", chr),
+                 chromStart=c(10, 30, 50, 70),
+                 chromEnd=c(20, 40, 60, 80),
+                 annotation=c("noPeaks", "peakStart", "peakEnd", "peaks"))
+    })
+  }
+  expect_tp_fp(regions, peaks,
+               c(0, 0, 0, 0,
+                 0, 1, 1, 1,
+                 0, 1, 1, 1,
+                 0, 1, 1, 1,
+                 0, 0, 1, 1),
+               c(0, 0, 0, 0,
+                 1, 1, 1, 0,
+                 0, 0, 0, 0,
+                 1, 1, 0, 0,
+                 1, 0, 1, 0))
+})
+
+test_that("noPeaks boundaries are correct", {
   regions <-
     data.frame(chrom="chr1", chromStart=4, chromEnd=8, annotation="noPeaks")
   expect_tp_fp(regions, Peaks("chr1", c(1, 8), c(4, 10)), 0, 0)
   expect_tp_fp(regions, Peaks("chr1", c(1, 8), c(5, 10)), 0, 1)
-  expect_tp_fp(regions, Peaks("chr1", c(1, 8), c(6, 10)), 0, 1)
   expect_tp_fp(regions, Peaks("chr1", c(1, 7), c(4, 10)), 0, 1)
 })
+
+test_that("peaks boundaries are correct", {
+  regions <-
+    data.frame(chrom="chr1", chromStart=4, chromEnd=8, annotation="peaks")
+  expect_tp_fp(regions, Peaks("chr1", c(1, 8), c(4, 10)), 0, 0)
+  expect_tp_fp(regions, Peaks("chr1", c(1, 8), c(5, 10)), 1, 0)
+  expect_tp_fp(regions, Peaks("chr1", c(1, 7), c(4, 10)), 1, 0)
+})
+
+test_that("peakStart boundaries are correct", {
+  regions <-
+    data.frame(chrom="chr1", chromStart=4, chromEnd=8, annotation="peakStart")
+  expect_tp_fp(regions, Peaks("chr1", c(1, 8), c(4, 10)), 0, 0)
+  expect_tp_fp(regions, Peaks("chr1", c(1, 8), c(5, 10)), 0, 0)
+  expect_tp_fp(regions, Peaks("chr1", c(1, 7), c(4, 10)), 1, 0)
+})
+
+test_that("peakEnd boundaries are correct", {
+  regions <-
+    data.frame(chrom="chr1", chromStart=4, chromEnd=8, annotation="peakEnd")
+  expect_tp_fp(regions, Peaks("chr1", c(1, 8), c(4, 10)), 0, 0)
+  expect_tp_fp(regions, Peaks("chr1", c(1, 8), c(5, 10)), 1, 0)
+  expect_tp_fp(regions, Peaks("chr1", c(1, 7), c(4, 10)), 0, 0)
+})
+

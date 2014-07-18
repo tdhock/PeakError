@@ -78,6 +78,7 @@ int PeakError(int* peak_start, int* peak_end, int peak_count,
 	region_fp[region_i] = 0;
       }
       region_possible_tp[region_i] = 0;
+      region_possible_fp[region_i] = 1;
       break;
     case ANNOTATION_peakStart:
     case ANNOTATION_peakEnd:
@@ -88,11 +89,20 @@ int PeakError(int* peak_start, int* peak_end, int peak_count,
 	region_fp[region_i] = 0;
       }
       region_possible_tp[region_i] = 1;
+      region_possible_fp[region_i] = 1;
+      break;
+    case ANNOTATION_peaks:
+      if(region_possible_fp[region_i] > 0){
+	region_tp[region_i] = 1;
+      }else{
+	region_tp[region_i] = 0;
+      }
+      region_possible_tp[region_i] = 1;
+      region_possible_fp[region_i] = 0;
       break;
     default:
       return ERROR_UNDEFINED_ANNOTATION;
     }
-    region_possible_fp[region_i] = 1;
   }
   return 0;
 }

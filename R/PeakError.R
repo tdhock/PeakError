@@ -10,7 +10,7 @@ PeakError <- structure(function
   stopifnot(is.data.frame(regions))
   peak.list <- split(peaks, peaks$chrom)
   region.list <- split(regions, regions$chrom, drop=TRUE)
-  ann2code <- c(noPeaks=0, peakStart=1, peakEnd=2)
+  ann2code <- c(noPeaks=0, peakStart=1, peakEnd=2, peaks=3)
   error.list <- list()
   for(chrom in names(region.list)){
     p <- peak.list[[chrom]]
@@ -60,36 +60,37 @@ PeakError <- structure(function
 ### positives (tp, possible.tp), false positives (fp, possible.fp,
 ### fp.status), and false negatives (fn, fn.status).
 }, ex=function(){
-  peaks <- rbind(Peaks("chr2", 5, 65),
-                 Peaks("chr3", c(23, 38), c(26, 55)),
-                 Peaks("chr4", c(32, 38), c(35, 55)),
-                 Peaks("chr5", 26, 55),
-                 Peaks("chr6", 38, 65))
+  x <- seq(5, 85, by=5)
+  peaks <- rbind(Peaks("chr2", x, x+3),
+                 Peaks("chr3", c(25, 38, 57), c(33, 54, 75)),
+                 Peaks("chr4", c(5, 32, 38, 65), c(15, 35, 55, 85)),
+                 Peaks("chr5", c(12, 26, 56, 75), c(16, 54, 59, 85)))
   regions <- NULL
-  for(chr in 1:6){
+  for(chr in 1:5){
     regions <- rbind(regions, {
       data.frame(chrom=paste0("chr", chr),
-                 chromStart=c(10, 30, 50),
-                 chromEnd=c(20, 40, 60),
-                 annotation=c("noPeaks", "peakStart", "peakEnd"))
+                 chromStart=c(10, 30, 50, 70),
+                 chromEnd=c(20, 40, 60, 80),
+                 annotation=c("noPeaks", "peakStart", "peakEnd", "peaks"))
     })
   }
   err <- PeakError(peaks, regions)
   ann.colors <-
     c(noPeaks="#f6f4bf",
       peakStart="#ffafaf",
-      peakEnd="#ff4c4c")
+      peakEnd="#ff4c4c",
+      peaks="#a445ee")
   library(ggplot2)
   ggplot()+
     geom_rect(aes(xmin=chromStart-1/2, xmax=chromEnd-1/2,
                   ymin=-1, ymax=1,
                   fill=annotation,
-                  size=fn.status,
-                  linetype=fp.status),
+                  linetype=fn.status,
+                  size=fp.status),
               data=err, color="black")+
     scale_y_continuous("", breaks=NULL)+
-    scale_linetype_manual(values=c("false positive"="dotted", correct="solid"))+
-    scale_size_manual(values=c("false negative"=3, correct=1/2))+
+    scale_linetype_manual(values=c("false negative"="dotted", correct="solid"))+
+    scale_size_manual(values=c("false positive"=3, correct=1))+
     scale_fill_manual(values=ann.colors, breaks=names(ann.colors))+
     facet_grid(chrom ~ .)+
     theme_bw()+
@@ -98,5 +99,6 @@ PeakError <- structure(function
            size=guide_legend(order=3, override.aes=list(fill="white")))+
     theme(panel.margin=grid::unit(0, "cm"))+
     geom_segment(aes(chromStart-1/2, 0, xend=chromEnd-1/2, yend=0),
-                 data=peaks, color="deepskyblue", size=2)
+                 data=peaks, color="deepskyblue", size=2)+
+    xlab("position on chromosome")
 })

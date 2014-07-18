@@ -12,3 +12,4 @@ int PeakError(int* peak_start, int* peak_end, int peak_count,
 #define ANNOTATION_noPeaks 0
 #define ANNOTATION_peakStart 1
 #define ANNOTATION_peakEnd 2
+#define ANNOTATION_peaks 3
