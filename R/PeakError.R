@@ -1,3 +1,51 @@
+PeakErrorChrom <- function
+### Assume p and r come from the same chromosome.
+(p,
+### data.frame of peaks.
+ r
+### data.frame of regions.
+ ){
+  p <- p[order(p$chromStart), ]
+  r <- r[order(r$chromStart), ]
+  if(is.null(r$annotation)){
+    stop("need annotation column in regions")
+  }
+  ann2code <- c(noPeaks=0, peakStart=1, peakEnd=2, peaks=3)
+  code <- ann2code[as.character(r$annotation)]
+  unknown <- r$annotation[is.na(code)]
+  if(length(unknown)){
+    u <- paste(unique(unknown), collapse=", ")
+    stop("unknown annotation (", u,
+         ") annotations must be one of: ",
+         paste(names(ann2code), collapse=", "))
+  }
+  result <- 
+    .C("PeakError_interface",
+       peak.chromStart=as.integer(p$chromStart),
+       peak.chromEnd=as.integer(p$chromEnd),
+       peak.count=as.integer(nrow(p)),
+       chromStart=as.integer(r$chromStart),
+       chromEnd=as.integer(r$chromEnd),
+       annotation=as.integer(code),
+       region.count=as.integer(nrow(r)),
+       tp=integer(nrow(r)),
+       fp=integer(nrow(r)),
+       possible.tp=integer(nrow(r)),
+       possible.fp=integer(nrow(r)),
+       package="PeakError")
+  err <- with(result, {
+    data.frame(chromStart, chromEnd, annotation=r$annotation,
+               tp, possible.tp, fp, possible.fp)
+  })
+  err$fp.status <- ifelse(err$fp, "false positive", "correct")
+  err$fn <- with(err, possible.tp-tp)
+  err$fn.status <- ifelse(err$fn, "false negative", "correct")
+  err$status <- with(err, ifelse(fn, "false negative",
+                                 ifelse(fp, "false positive", "correct")))
+  err
+### data.frame of error.
+}
+
 PeakError <- structure(function
 ### Compute true and false positive peak calls, with respect to a
 ### database of annotated regions.
@@ -10,51 +58,18 @@ PeakError <- structure(function
   stopifnot(is.data.frame(regions))
   peak.list <- split(peaks, peaks$chrom)
   region.list <- split(regions, regions$chrom, drop=TRUE)
-  ann2code <- c(noPeaks=0, peakStart=1, peakEnd=2, peaks=3)
   error.list <- list()
   for(chrom in names(region.list)){
     p <- peak.list[[chrom]]
     if(is.null(p)){
       p <- data.frame(chromStart=integer(), chromEnd=integer())
     }
-    p <- p[order(p$chromStart), ]
     r <- region.list[[chrom]]
-    r <- r[order(r$chromStart), ]
-    r$annotation
-    if(is.null(r$annotation)){
-      stop("need annotation column in regions")
-    }
-    code <- ann2code[as.character(r$annotation)]
-    unknown <- r$annotation[is.na(code)]
-    if(length(unknown)){
-      u <- paste(unique(unknown), collapse=", ")
-      stop("unknown annotation (", u,
-           ") annotations must be one of: noPeaks, peakStart, peakEnd")
-    }
-    result <- 
-      .C("PeakError_interface",
-         peak.chromStart=as.integer(p$chromStart),
-         peak.chromEnd=as.integer(p$chromEnd),
-         peak.count=as.integer(nrow(p)),
-         chromStart=as.integer(r$chromStart),
-         chromEnd=as.integer(r$chromEnd),
-         annotation=as.integer(code),
-         region.count=as.integer(nrow(r)),
-         tp=integer(nrow(r)),
-         fp=integer(nrow(r)),
-         possible.tp=integer(nrow(r)),
-         possible.fp=integer(nrow(r)),
-         package="PeakError")
-    error.list[[chrom]] <- with(result, {
-      data.frame(chrom, chromStart, chromEnd, annotation=r$annotation,
-                 tp, possible.tp, fp, possible.fp)
-    })
+    result <- PeakErrorChrom(p, r)
+    error.list[[chrom]] <- data.frame(chrom, result)
   }
   err <- do.call(rbind, error.list)
   rownames(err) <- NULL
-  err$fp.status <- ifelse(err$fp, "false positive", "correct")
-  err$fn <- with(err, possible.tp-tp)
-  err$fn.status <- ifelse(err$fn, "false negative", "correct")
   err
 ### data.frame for each region with additional counts of true
 ### positives (tp, possible.tp), false positives (fp, possible.fp,
@@ -102,3 +117,4 @@ PeakError <- structure(function
                  data=peaks, color="deepskyblue", size=2)+
     xlab("position on chromosome")
 })
+
