@@ -1,7 +1,8 @@
 \name{PeakErrorChrom}
 \alias{PeakErrorChrom}
 \title{PeakErrorChrom}
-\description{Assume p and r come from the same chromosome.}
+\description{Compute the PeakError assuming that peaks and regions are on the
+same chrom.}
 \usage{PeakErrorChrom(peaks, regions)}
 \arguments{
   \item{peaks}{data.frame with columns chromStart, chromEnd. NOTE: chromStart

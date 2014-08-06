@@ -1,5 +1,6 @@
 PeakErrorChrom <- function
-### Assume p and r come from the same chromosome.
+### Compute the PeakError assuming that peaks and regions are on the
+### same chrom.
 (peaks,
 ### data.frame with columns chromStart, chromEnd. NOTE: chromStart
 ### should be 0-based and chromEnd should be 1-based. EXAMPLE: the
