@@ -1,12 +1,18 @@
 PeakErrorChrom <- function
 ### Assume p and r come from the same chromosome.
-(p,
-### data.frame of peaks.
- r
-### data.frame of regions.
+(peaks,
+### data.frame with columns chromStart, chromEnd. NOTE: chromStart
+### should be 0-based and chromEnd should be 1-based. EXAMPLE: the
+### first 100 base of of a chromosome are chromStart=0,
+### chromEnd=100. The second 100 bases are chromStart=100,
+### chromEnd=200.
+ regions
+### data.frame with columns chromStart, chromEnd.
  ){
-  p <- p[order(p$chromStart), ]
-  r <- r[order(r$chromStart), ]
+  checkPositions(peaks)
+  checkPositions(regions)
+  p <- peaks[order(peaks$chromStart), ]
+  r <- regions[order(regions$chromStart), ]
   if(is.null(r$annotation)){
     stop("need annotation column in regions")
   }
@@ -43,19 +49,23 @@ PeakErrorChrom <- function
   err$status <- with(err, ifelse(fn, "false negative",
                                  ifelse(fp, "false positive", "correct")))
   err
-### data.frame of error.
+### data.frame with 1 row for each region and error columns.
 }
 
 PeakError <- structure(function
 ### Compute true and false positive peak calls, with respect to a
 ### database of annotated regions.
 (peaks,
-### data.frame with columns chrom, chromStart, chromEnd.
+### data.frame with columns chrom, chromStart, chromEnd. NOTE:
+### chromStart should be 0-based and chromEnd should be
+### 1-based. EXAMPLE: the first 100 base of of a chromosome are
+### chromStart=0, chromEnd=100. The second 100 bases are
+### chromStart=100, chromEnd=200.
  regions
 ### data.frame with columns chrom, chromStart, chromEnd, annotation.
  ){
-  stopifnot(is.data.frame(peaks))
-  stopifnot(is.data.frame(regions))
+  checkChrom(peaks)
+  checkChrom(regions)
   peak.list <- split(peaks, peaks$chrom)
   region.list <- split(regions, regions$chrom, drop=TRUE)
   error.list <- list()
@@ -97,7 +107,7 @@ PeakError <- structure(function
       peaks="#a445ee")
   library(ggplot2)
   ggplot()+
-    geom_rect(aes(xmin=chromStart-1/2, xmax=chromEnd-1/2,
+    geom_rect(aes(xmin=chromStart+1/2, xmax=chromEnd+1/2,
                   ymin=-1, ymax=1,
                   fill=annotation,
                   linetype=fn.status,
@@ -113,8 +123,11 @@ PeakError <- structure(function
            linetype=guide_legend(order=2, override.aes=list(fill="white")),
            size=guide_legend(order=3, override.aes=list(fill="white")))+
     theme(panel.margin=grid::unit(0, "cm"))+
-    geom_segment(aes(chromStart-1/2, 0, xend=chromEnd-1/2, yend=0),
+    geom_segment(aes(chromStart+1/2, 1/2, xend=chromEnd+1/2, yend=1/2),
                  data=peaks, color="deepskyblue", size=2)+
-    xlab("position on chromosome")
+    scale_x_continuous("position on chromosome",
+                       breaks=seq(10, 90, by=10))+
+    geom_text(aes(base, -1/2, label="N"), data.frame(base=10:90),
+              color="deepskyblue")
 })
 

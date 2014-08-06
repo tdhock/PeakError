@@ -1,12 +1,12 @@
 \name{Peaks}
 \alias{Peaks}
 \title{Peaks}
-\description{Represent a data.frame that represents a list of peaks.}
-\usage{Peaks(chrom = factor(), chromStart = integer(), chromEnd = integer())}
+\description{Make a data.frame that represents a list of peaks.}
+\usage{Peaks(chrom = factor(), base.before = integer(), last.base = integer())}
 \arguments{
   \item{chrom}{character or factor with chrom name for example "chr22"}
-  \item{chromStart}{numeric, first base of peak.}
-  \item{chromEnd}{numeric, base after peak.}
+  \item{base.before}{integer, base before peak.}
+  \item{last.base}{integer, last base of peak.}
 }
 
 \value{data.frame with columns chrom, chromStart, chromEnd.}

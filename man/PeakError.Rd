@@ -5,7 +5,11 @@
 database of annotated regions.}
 \usage{PeakError(peaks, regions)}
 \arguments{
-  \item{peaks}{data.frame with columns chrom, chromStart, chromEnd.}
+  \item{peaks}{data.frame with columns chrom, chromStart, chromEnd. NOTE:
+chromStart should be 0-based and chromEnd should be
+1-based. EXAMPLE: the first 100 base of of a chromosome are
+chromStart=0, chromEnd=100. The second 100 bases are
+chromStart=100, chromEnd=200.}
   \item{regions}{data.frame with columns chrom, chromStart, chromEnd, annotation.}
 }
 
@@ -41,7 +45,7 @@ ann.colors <-
     peaks="#a445ee")
 library(ggplot2)
 ggplot()+
-  geom_rect(aes(xmin=chromStart-1/2, xmax=chromEnd-1/2,
+  geom_rect(aes(xmin=chromStart+1/2, xmax=chromEnd+1/2,
                 ymin=-1, ymax=1,
                 fill=annotation,
                 linetype=fn.status,
@@ -57,7 +61,10 @@ ggplot()+
          linetype=guide_legend(order=2, override.aes=list(fill="white")),
          size=guide_legend(order=3, override.aes=list(fill="white")))+
   theme(panel.margin=grid::unit(0, "cm"))+
-  geom_segment(aes(chromStart-1/2, 0, xend=chromEnd-1/2, yend=0),
+  geom_segment(aes(chromStart+1/2, 1/2, xend=chromEnd+1/2, yend=1/2),
                data=peaks, color="deepskyblue", size=2)+
-  xlab("position on chromosome")
+  scale_x_continuous("position on chromosome",
+                     breaks=seq(10, 90, by=10))+
+  geom_text(aes(base, -1/2, label="N"), data.frame(base=10:90),
+            color="deepskyblue")
 }

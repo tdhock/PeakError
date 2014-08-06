@@ -1,3 +1,7 @@
+2014.8.6
+
+0-based chromStart and 1-based chromEnd, more checks.
+
 2014.7.23
 
 PeakErrorChrom function.
