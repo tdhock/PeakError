@@ -1,6 +1,6 @@
 PeakError: compute the annotation error of peak calls
 
-https://travis-ci.org/tdhock/PeakError.png?branch=master
+[[https://travis-ci.org/tdhock/PeakError][https://travis-ci.org/tdhock/PeakError.png?branch=master]]
 
 After constructing a database of annotated regions that represent your
 visual interpretation of the peak locations in a ChIP-seq experiment,
