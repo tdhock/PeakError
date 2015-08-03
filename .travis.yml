@@ -1,0 +1,15 @@
+language: r
+sudo: required
+r_github_packages:
+  - da-ta-vinci21/Rperform
+  - yihui/knitr
+
+env:
+  global:
+  - secure: "pObHRQex9Pxo+Szzux15qLyHc2oTKHE9bGQ6faquzti8RCyZR7JZIp2UuzFVb5hA3jZcwvhUh5F8GFtj0e+9/rTGl7rOgE4oQwlqotSIg70Bkga+Nm3tRcwJHUOvrAmPPaffRvSgqrtltM6my+aW6PSr8KHRFfKYzWtvKy2M0qE="
+
+before_install:
+  - chmod 755 .push_gh_pages.sh
+
+after_success:
+  - ./.push_gh_pages.sh
