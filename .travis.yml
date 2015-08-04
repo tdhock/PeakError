@@ -6,7 +6,7 @@ r_github_packages:
 
 env:
   global:
-  - secure: "pObHRQex9Pxo+Szzux15qLyHc2oTKHE9bGQ6faquzti8RCyZR7JZIp2UuzFVb5hA3jZcwvhUh5F8GFtj0e+9/rTGl7rOgE4oQwlqotSIg70Bkga+Nm3tRcwJHUOvrAmPPaffRvSgqrtltM6my+aW6PSr8KHRFfKYzWtvKy2M0qE="
+  - secure: "Wy8RDFyW7NO+V86Izh3AyOgcJGVTd2ja6SA4lcizeLLnRJH85lZP63S64jj0qd/1BpGb8EdFrbpiCzRujAh87qek0YkrWtvupDlbPiAqISmhKAKZaY8jtyQ++TSdtNMHWdfky/qaxGmGd3uD2QEu1sUKPBpzCAlbo5IvfKERjwU="
 
 before_install:
   - chmod 755 .push_gh_pages.sh
