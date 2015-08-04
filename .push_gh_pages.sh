@@ -15,7 +15,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   #go into master directory and run the Rperform functions
   cd master
   touch temp_Rperform.R
-  echo "Rperform::plot_webpage(test_directory = \"./tests/\")" >> temp_Rperform.R
+  echo "Rperform::plot_webpage(test_directory = \"./tests/testthat/\")" >> temp_Rperform.R
   Rscript temp_Rperform.R
   rm temp_Rperform.R
 
