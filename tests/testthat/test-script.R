@@ -1,9 +1,12 @@
 context("script")
 
 test_that("compute_error.R correct", {
-  compute_error.R <- system.file("exec", "compute_error.R", package="PeakError")
+  compute_error.R <- system.file(
+    "exec", "compute_error.R",
+    mustWork=TRUE,
+    package="PeakError")
   Rscript <- R.home(file.path("bin", "Rscript"))
-  exampleData <- system.file("exampleData", package="PeakError")
+  exampleData <- system.file("exampleData", package="PeakError", mustWork=TRUE)
   peaks.bed <- file.path(exampleData, "peaks.bed")
   labels.bed <- file.path(exampleData, "labels.bed")
   errors.bed <- tempfile()
