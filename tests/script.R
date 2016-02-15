@@ -43,6 +43,14 @@ stopifnot(grepl("incorrect labels", out.txt))
 stopifnot(grepl("false positive rate", out.txt))
 stopifnot(grepl("false negative rate", out.txt))
 
+## Two arguments
+cmd <- paste(Rscript, summarize_error.R, out.file, out.file)
+out.vec <- system(cmd, intern=TRUE)
+out.txt <- paste(out.vec, collapse="\n")
+stopifnot(grepl("incorrect labels", out.txt))
+stopifnot(grepl("false positive rate", out.txt))
+stopifnot(grepl("false negative rate", out.txt))
+
 ##test_that("overlapping_peaks.bed shows error", {
 arg.vec <- paste(compute_error.R, overlapping.bed, labels.bed)
 out.vec <- system2(Rscript, arg.vec, stderr=TRUE)
