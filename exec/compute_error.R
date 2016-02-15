@@ -30,6 +30,13 @@ labels <- read.table(
   colClasses=labels.classes,
   col.names=names(labels.classes))
 
-library(PeakError)
+if(!require(devtools)){
+  install.packages("devtools")
+  library(devtools)
+}
+if(!require(PeakError)){
+  install_github("tdhock/PeakError")
+  library(PeakError)
+}
 errors <- PeakError(peaks, labels)
 write.table(errors, sep="\t", quote=FALSE, row.names=FALSE)
