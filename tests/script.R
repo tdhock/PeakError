@@ -2,7 +2,7 @@
 ## errors when using the system() and system2() functions (bug in
 ## testthat).
 PeakError_compute.R <- system.file(
-  "exec", "PeakError_compute.R",
+  "exampleData", "PeakError_compute.R",
   mustWork=TRUE,
   package="PeakError")
 Rscript <- R.home(file.path("bin", "Rscript"))
@@ -33,7 +33,7 @@ stopifnot(all.equal(
 
 ## PeakError_summarize.R script
 PeakError_summarize.R <- system.file(
-  "exec", "PeakError_summarize.R",
+  "exampleData", "PeakError_summarize.R",
   mustWork=TRUE,
   package="PeakError")
 cmd <- paste(Rscript, PeakError_summarize.R, out.file)
