@@ -6,14 +6,46 @@ After constructing a database of annotated regions that represent your
 visual interpretation of the peak locations in a ChIP-seq experiment,
 you can compute the error of a peak calling model using this package.
 
+** R installation
+
+#+BEGIN_SRC R
+if(!require(devtools))install.packages("devtools")
+devtools::install_github("tdhock/PeakError")
+#+END_SRC
+
 ** R usage
 
 #+BEGIN_SRC R
-install.packages("devtools")
-devtools::install_github("tdhock/PeakError")
 library(PeakError)
 example(PeakError)
 #+END_SRC
 
 ** Command line usage
 
+The [[file:inst/exampleData/][exampleData]] directory contains command line scripts for computing
+the PeakError for peaks and labels defined in bed files:
+
+#+BEGIN_SRC shell-script
+cd $(Rscript -e 'cat(system.file("exampleData", package="PeakError"))')
+Rscript PeakError_compute.R peaks.bed labels.bed > errors.tsv
+Rscript PeakError_summarize.R errors.tsv
+#+END_SRC
+
+On my system I got the following output:
+
+#+BEGIN_SRC 
+thocking@silene:~/R$ cd $(Rscript -e 'cat(system.file("exampleData", package="PeakError"))')
+thocking@silene:~/lib/R/library/PeakError/exampleData$ Rscript PeakError_compute.R peaks.bed labels.bed > errors.tsv
+read 28 peaks
+read 20 labels
+Loading required package: PeakError
+computed errors for 20 labels
+thocking@silene:~/lib/R/library/PeakError/exampleData$ Rscript PeakError_summarize.R errors.tsv
+
+  noPeaks   peakEnd     peaks peakStart 
+        5         5         5         5 
+11 / 20 incorrect labels = 55.000000% error rate
+7 false positives / 15 possible = 46.666667% false positive rate
+4 false negatives / 15 possible = 26.666667% false negative rate
+thocking@silene:~/lib/R/library/PeakError/exampleData$ 
+#+END_SRC

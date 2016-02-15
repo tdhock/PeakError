@@ -19,6 +19,7 @@ peaks <- read.table(
   peaks.bed,
   colClasses=peak.classes,
   col.names=names(peak.classes))
+message("read ", nrow(peaks), " peaks")
 
 labels.classes <- c(
   chrom="character",
@@ -29,14 +30,16 @@ labels <- read.table(
   labels.bed,
   colClasses=labels.classes,
   col.names=names(labels.classes))
+message("read ", nrow(labels), " labels")
 
-if(!require(devtools)){
-  install.packages("devtools")
-  library(devtools)
-}
 if(!require(PeakError)){
+  if(!require(devtools)){
+    install.packages("devtools")
+    library(devtools)
+  }
   install_github("tdhock/PeakError")
   library(PeakError)
 }
 errors <- PeakError(peaks, labels)
 write.table(errors, sep="\t", quote=FALSE, row.names=FALSE)
+message("computed errors for ", nrow(errors), " labels")
