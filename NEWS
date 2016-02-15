@@ -1,3 +1,7 @@
+2016.02.08
+
+compute_error.R command line tool and tests.
+
 2014.8.6
 
 0-based chromStart and 1-based chromEnd, more checks.

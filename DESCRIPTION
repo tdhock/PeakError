@@ -1,7 +1,7 @@
 Package: PeakError
 Maintainer: Toby Dylan Hocking <tdhock5@gmail.com>
 Author: Toby Dylan Hocking
-Version: 2014.8.6
+Version: 2016.02.08
 License: GPL-3
 Title: Compute the annotation error of peak calls
 Description: Chromatin immunoprecipitation DNA sequencing results in genomic
