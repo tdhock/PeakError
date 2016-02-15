@@ -12,10 +12,10 @@ labels.bed <- file.path(exampleData, "labels.bed")
 overlapping.bed <- file.path(exampleData, "overlapping_peaks.bed")
 
 ##test_that("compute_error.R correct", {
-cmd <- paste(Rscript, compute_error.R, peaks.bed, labels.bed)
-error.vec <- system(cmd, intern=TRUE)
-error.txt <- paste(error.vec, collapse="\n")
-errors <- read.table(text=error.txt, sep="\t", header=TRUE)
+out.file <- tempfile()
+cmd <- paste(Rscript, compute_error.R, peaks.bed, labels.bed, ">", out.file)
+status <- system(cmd)
+errors <- read.table(out.file, sep="\t", header=TRUE)
 stopifnot(all.equal(
   errors$tp,
   c(0, 0, 0, 0,
@@ -30,6 +30,18 @@ stopifnot(all.equal(
     0, 0, 0, 0,
     1, 1, 0, 0,
     1, 0, 1, 0)))
+
+## summarize_error.R script
+summarize_error.R <- system.file(
+  "exec", "summarize_error.R",
+  mustWork=TRUE,
+  package="PeakError")
+cmd <- paste(Rscript, summarize_error.R, out.file)
+out.vec <- system(cmd, intern=TRUE)
+out.txt <- paste(out.vec, collapse="\n")
+stopifnot(grepl("incorrect labels", out.txt))
+stopifnot(grepl("false positive rate", out.txt))
+stopifnot(grepl("false negative rate", out.txt))
 
 ##test_that("overlapping_peaks.bed shows error", {
 arg.vec <- paste(compute_error.R, overlapping.bed, labels.bed)
