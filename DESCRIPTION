@@ -1,9 +1,9 @@
 Package: PeakError
 Maintainer: Toby Dylan Hocking <tdhock5@gmail.com>
 Author: Toby Dylan Hocking
-Version: 2016.02.08
+Version: 2017.03.31
 License: GPL-3
-Title: Compute the annotation error of peak calls
+Title: Compute the Annotation Error of Peak Calls
 Description: Chromatin immunoprecipitation DNA sequencing results in genomic
     tracks that show enriched regions or peaks where proteins are bound.
     This package implements fast C code that computes the true and false
