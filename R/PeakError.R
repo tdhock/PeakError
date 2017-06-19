@@ -39,7 +39,7 @@ PeakErrorChrom <- function
        fp=integer(nrow(r)),
        possible.tp=integer(nrow(r)),
        possible.fp=integer(nrow(r)),
-       package="PeakError")
+       PACKAGE="PeakError")
   err <- with(result, {
     data.frame(chromStart, chromEnd, annotation=r$annotation,
                tp, possible.tp, fp, possible.fp)
