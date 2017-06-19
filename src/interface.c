@@ -1,5 +1,8 @@
+/* -*- compile-command: "R CMD INSTALL .." -*- */
+
 #include "PeakError.h"
 #include <R.h>
+#include <R_ext/Rdynload.h>
 
 void PeakError_interface
 (int* peak_start, int* peak_end, int* peak_count,
@@ -33,3 +36,18 @@ void PeakError_interface
     }
 }
 	
+R_CMethodDef cMethods[] = {
+  {"PeakError_interface",
+   (DL_FUNC) &PeakError_interface, 11
+   //,{REALSXP, REALSXP, INTSXP, INTSXP, REALSXP}
+  },
+  {NULL, NULL, 0}
+};
+
+void R_init_PeakError(DllInfo *info) {
+  R_registerRoutines(info, cMethods, NULL, NULL, NULL);
+  //R_useDynamicSymbols call says the DLL is not to be searched for
+  //entry points specified by character strings so .C etc calls will
+  //only find registered symbols.
+  R_useDynamicSymbols(info, FALSE);
+}
