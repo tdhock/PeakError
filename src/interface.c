@@ -38,7 +38,7 @@ void PeakError_interface
 	
 R_CMethodDef cMethods[] = {
   {"PeakError_interface",
-   (DL_FUNC) &PeakError_interface, 12
+   (DL_FUNC) &PeakError_interface, 11
    //,{REALSXP, REALSXP, INTSXP, INTSXP, REALSXP}
   },
   {NULL, NULL, 0}
