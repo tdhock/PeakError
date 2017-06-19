@@ -1,10 +1,21 @@
-PeakError: compute the annotation error of peak calls
+PeakError: compute the label error rate of peak calling models
 
 [[https://travis-ci.org/tdhock/PeakError][https://travis-ci.org/tdhock/PeakError.png?branch=master]]
 
-After constructing a database of annotated regions that represent your
-visual interpretation of the peak locations in a ChIP-seq experiment,
-you can compute the error of a peak calling model using this package.
+After constructing a database of labels that indicate specific samples
+and genomic regions with and without peaks in a ChIP-seq experiment,
+you can compute the label error rate of a peak calling model using this
+package. This is useful for
+- training peak calling model parameters: choose the parameter values
+  that minimize the number of incorrect labels.
+- testing different peak calling models: compute the label error rate of two
+  or more different peak models. The one with the lowest label error rate
+  is the most accurate in your data.
+
+For more details, please read our paper "Optimizing ChIP-seq peak
+detectors using visual labels and supervised machine learning" by
+Hocking et al,
+Bioinformatics 2017. https://www.ncbi.nlm.nih.gov/pubmed/27797775
 
 ** R installation
 
