@@ -2,8 +2,8 @@ PeakError: compute the label error rate of peak calling models
 
 [[https://travis-ci.org/tdhock/PeakError][https://travis-ci.org/tdhock/PeakError.png?branch=master]]
 
-After constructing a database of labels that indicate specific samples
-and genomic regions with and without peaks in a ChIP-seq experiment,
+After constructing [[https://rcdata.nau.edu/genomic-ml/chip-seq-chunk-db/][a database of labels that indicate specific samples
+and genomic regions with and without peaks in a ChIP-seq experiment]],
 you can compute the label error rate of a peak calling model using this
 package. This is useful for
 - training peak calling model parameters: choose the parameter values
