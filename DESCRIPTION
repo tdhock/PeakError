@@ -1,12 +1,12 @@
 Package: PeakError
 Maintainer: Toby Dylan Hocking <toby.hocking@r-project.org>
 Author: Toby Dylan Hocking
-Version: 2017.06.19
+Version: 2021.7.1
 License: GPL-3
-Title: Compute the Annotation Error of Peak Calls
+Title: Compute the Label Error of Peak Calls
 Description: Chromatin immunoprecipitation DNA sequencing results in genomic
     tracks that show enriched regions or peaks where proteins are bound.
     This package implements fast C code that computes the true and false
-    positives with respect to a database of annotated regions.
+    positives with respect to a database of annotated region labels.
 Suggests:
     testthat, ggplot2
