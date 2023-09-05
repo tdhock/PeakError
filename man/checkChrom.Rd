@@ -4,8 +4,7 @@
 \description{Check for a valid data.frame with chrom names.}
 \usage{checkChrom(df)}
 \arguments{
-  \item{df}{
-}
+  \item{df}{df }
 }
 
 

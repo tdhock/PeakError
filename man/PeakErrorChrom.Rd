@@ -1,9 +1,10 @@
 \name{PeakErrorChrom}
 \alias{PeakErrorChrom}
 \title{PeakErrorChrom}
-\description{Compute the PeakError assuming that peaks and regions are on the
+\description{Compute the \code{\link{PeakError}} assuming that \code{peaks} and \code{regions} are on the
 same chrom.}
-\usage{PeakErrorChrom(peaks, regions)}
+\usage{PeakErrorChrom(peaks, 
+    regions)}
 \arguments{
   \item{peaks}{data.frame with columns chromStart, chromEnd. NOTE: chromStart
 should be 0-based and chromEnd should be 1-based. EXAMPLE: the

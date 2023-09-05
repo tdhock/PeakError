@@ -1,3 +1,4 @@
+build.sh
 .travis.yml
 .push_gh_pages.sh
 README.org

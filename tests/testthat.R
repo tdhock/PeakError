@@ -1,2 +1,1 @@
-library(testthat)
-test_check("PeakError")
+if(require(testthat))test_check("PeakError")

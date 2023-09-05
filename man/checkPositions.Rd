@@ -4,8 +4,7 @@
 \description{Check for a valid data.frame with chromStart, chromEnd.}
 \usage{checkPositions(df)}
 \arguments{
-  \item{df}{
-}
+  \item{df}{df }
 }
 
 

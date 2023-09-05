@@ -1,7 +1,7 @@
 Package: PeakError
 Maintainer: Toby Dylan Hocking <toby.hocking@r-project.org>
 Author: Toby Dylan Hocking
-Version: 2021.7.1
+Version: 2023.9.4
 License: GPL-3
 Title: Compute the Label Error of Peak Calls
 Description: Chromatin immunoprecipitation DNA sequencing results in genomic
